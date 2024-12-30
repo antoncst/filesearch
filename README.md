@@ -1,8 +1,8 @@
-search for files in the file system
-query algorithm:
-Easiest way. Just type the words (or the parts of the words) separating 
-them with spaces.
-
+search for files in the file system <br>
+ <br>
+query algorithm: <br>
+Easiest way. Just type the words (or the parts of the words) separating them with spaces. <br>
+ <br>
 Algorithm.
 
 1. Spliting string to some strings. Separator is space. The AND 
