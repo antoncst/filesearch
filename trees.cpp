@@ -10,12 +10,17 @@
 #include "trees.h"
 #include "to_lower_case.h"
 
+// This implementation stores the tree in a vector
+// The main disadvantage is the validity of the pointer to parent.
+// Thus, we cannot assign or move the tree. 
+
 
 class tdir : public tfile
 {
-  std::vector< tdir > m_dirs ;
+  std::vector< tdir > m_dirs ; // the tree
   std::vector< tfile> m_files ;
 public:
+
   void add_file( const tfile && file )
   { 
     m_files.emplace_back( file ) ; 
