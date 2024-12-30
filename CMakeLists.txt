@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.5)
+project(file_search)
+set(SOURCE_EXE main.cpp)
+set(SOURCE_LIB trees.cpp)
+add_library(trees STATIC ${SOURCE_LIB})
+add_executable(main ${SOURCE_EXE})
+target_link_libraries(main trees)

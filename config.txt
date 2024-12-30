@@ -1,0 +1,4 @@
+#dir: /
+#dir: c:/1/cpp/2020/agodown
+dir: /home/anton/1/cpp/2020/agodown
+#skip: /home/anton/1/cpp/2020/agodown/Release
