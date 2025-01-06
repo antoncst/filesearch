@@ -15,7 +15,7 @@
 // Thus, we cannot assign or move the tree.  
 // Also we cannot delete copy and move constructor from class definition because it is stored in vector.
 // it works well, but this is a bad implementation. 
-// We can write constructors and assignments that rewrites pointers to parents each times.
+// We can compose constructors and assignments that rewrites pointers to parents each times.
 
 class tdir : public tfile
 {
