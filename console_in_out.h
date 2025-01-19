@@ -1,7 +1,6 @@
 #ifndef CONSOLE_IN_OUT_H
 #define CONSOLE_IN_OUT_H
 
-
 #include <iostream>
 
 #ifdef WINNT
@@ -17,7 +16,6 @@ class console_in_out
     public :
         console_in_out()
         { // console initialization:
-			std::ios::sync_with_stdio(false) ;
             _setmode(_fileno(stdout), _O_U16TEXT);
             _setmode(_fileno(stdin), _O_U16TEXT);
             setlocale(LC_ALL, "");

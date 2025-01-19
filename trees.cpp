@@ -14,8 +14,40 @@
 // The main disadvantage is the validity of the pointer to parent.
 // Thus, we cannot assign or move the tree.  
 // Also we cannot delete copy and move constructor from class definition because it is stored in vector.
-// it works well, but this is a bad implementation. 
+// it works well, but this is not the best implementation. 
 // We can compose constructors and assignments that rewrites pointers to parents each times.
+
+
+class tfile
+{
+    // file or dirictory name
+    std::string m_name ;
+
+    tfile * m_parent_dir = nullptr;
+  
+  public:
+    //explicit tfile( std::string & name ) : m_name( name ) {} ;
+    //tfile() {} ;
+    
+    // setters :
+    void set_name( const std::string & name ) 
+    { m_name = name ; }
+
+    void set_parent_dir( tfile * pdir )
+    { m_parent_dir = pdir ; }
+    
+    // getters :
+    const std::string & get_name() const
+    { return m_name ; }
+
+    const tfile * get_parent_dir() const
+    { return m_parent_dir ; } 
+    //
+
+    // get the full name beginning from the root dir
+    //virtual const std::string get_full_name() const ;
+} ;
+
 
 class tdir : public tfile
 {
@@ -141,23 +173,25 @@ std::vector<std::string> split_str( const std::string & str , const char delim )
 
 class ttrees : public ttreesI
 {
+  // stores trees:
   std::vector< tdir > m_dirs ;
+  //
   std::vector< std::string > m_vs_dirs ;
   std::vector< std::string > m_vs_skip_dirs ;
 public:
-  virtual void set_dirs( std::vector< std::string> & vs_dirs ,
-                         std::vector< std::string> & vs_skip_dirs  ) override // vs - vector of strings
+  virtual void set_dirs( const std::vector< std::string> & vs_dirs , 
+                          const std::vector< std::string> & vs_skip_dirs  ) override
   { 
     m_vs_dirs = vs_dirs ; 
     m_vs_skip_dirs = vs_skip_dirs ;
   }
 
 
-  virtual std::vector< tfile * > find_str( std::string & str ) override
+  virtual std::vector< const tfile * > find_str( const std::string & str ) override
   { 
     to_lower_case & to_lower = to_lower_case::init() ;
 
-    std::vector< tfile * > res_vec ;
+    std::vector< const tfile * > res_vec ;
 
     //prepare search query:
     std::vector< std::string > substrings_and2 = split_str( str , ' ' ) ;
@@ -180,7 +214,7 @@ public:
                     if ( str_or[0] == '!') // negation
                     {
                         std::string str_neg = str_or.substr( 1 ) ;
-                        size_t pos = to_lower( file.get_full_name() ).find( str_neg ) ;
+                        size_t pos = to_lower( get_full_name( &file ) ).find( str_neg ) ;
                         if ( pos != std::string::npos ) //found
                         {   found_or = false ; break ; }
                         else
@@ -196,6 +230,7 @@ public:
                     }
                 }
                 found &= found_or ;
+                if ( !found ) break ;
             }
             if ( found )
             {
@@ -230,23 +265,24 @@ public:
     }
   }
 
+  virtual const std::string get_full_name( const tfile * file ) const override
+  {
+      std::string full_name = file->get_name() ;
+      const tfile * cur_dir = file->get_parent_dir() ;
+      while ( cur_dir != nullptr )
+      {
+        std::string str =  cur_dir->get_name() ;
+        full_name = str + "/" + full_name ;
+        cur_dir = cur_dir->get_parent_dir() ;
+      } ;
+
+      return full_name ;
+  } ;
+
+
 } ;
 
 
-
-const std::string tfile::get_full_name() const
-{
-    std::string full_name = m_name ;
-    const tfile * cur_dir = this->get_parent_dir() ;
-    while ( cur_dir != nullptr )
-    {
-      std::string str =  cur_dir->get_name() ;
-      full_name = str + "/" + full_name ;
-      cur_dir = cur_dir->get_parent_dir() ;
-    } ;
-
-    return full_name ;
-} ;
 
 ttreesI * ttreesI::create() 
 { return new ttrees ; }

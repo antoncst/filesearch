@@ -52,13 +52,13 @@ int main()
 
         // find string
 
-        std::vector<tfile * > res_vec =  trees->find_str( str_to_find ) ; 
+        std::vector<const tfile * > res_vec =  trees->find_str( str_to_find ) ; 
 
         // --------------------
 
         // output results
-        for ( tfile * tfile : res_vec )
-            cnsl.out_string( tfile->get_full_name() ) ;
+        for ( const tfile * file : res_vec )
+            cnsl.out_string( trees->get_full_name( file) ) ; //get_full_name
     }
 
 
